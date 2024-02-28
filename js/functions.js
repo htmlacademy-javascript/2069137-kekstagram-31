@@ -1,29 +1,27 @@
-function checkStringLength (string, maxLength) {
-  return (string.length <= maxLength);
-}
+const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 checkStringLength('abcdef', 6);
 
 
-function isPalindrome (string) {
-  string = string.toLowerCase().replaceAll(' ', '');
-  for (let i = 0, j = string.length - 1; i < (Math.floor(string.length / 2)); i++, j--) {
-    if (string[i] !== string[j]) {
+const isPalindrome = (ourString) => {
+  const newString = ourString.toLowerCase().replaceAll(' ', '');
+  for (let i = 0, j = newString.length - 1; i < (Math.floor(newString.length / 2)); i++, j--) {
+    if (newString[i] !== newString[j]) {
       return false;
     }
   }
   return true;
-}
+};
 
 isPalindrome('Лёша на полке клопа нашёл ');
 
 
-const getNumber = (string) => {
-  string = String(string);
+const getNumber = (ourString) => {
+  const newString = String(ourString);
   let resultNumber = 0;
-  for (let i = 0; i < string.length; i++) {
-    if (!isNaN(string[i])) {
-      resultNumber += string[i];
+  for (let i = 0; i < newString.length; i++) {
+    if (!isNaN(newString[i])) {
+      resultNumber += newString[i];
     }
   }
   return Number(resultNumber);
