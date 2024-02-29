@@ -1,3 +1,4 @@
+//3 функции к модулю 2
 const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 checkStringLength('abcdef', 6);
