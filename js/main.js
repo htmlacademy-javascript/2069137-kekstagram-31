@@ -11,17 +11,6 @@
 //    message, 2 случ. строки из предоставленного массива
 //    name, случ. строка из предоставленного массива
 
-
-/*
-+1. Создать массив комментариев
-+2. Создать массив имён
-+3. Написать генератор случайных чисел от n до m
-+4. Написать функцию, возвращающую пустой объект "comment"
-+5. Написать функцию, выдающую уникальный индекс от n до m
-+6. Написать функцию, выдающую случайный элемент указанного массива
-+7. Заполнить функцию, выдающую пустой объект, чтобы выдавала желаемый объект
-*/
-
 const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -51,7 +40,7 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomUnicIndex = (min, max) => {
+const getRandomUniqueIndex = (min, max) => {
   const previousValues = [];
   return function () {
     let currentValue = getRandomInteger(min, max);
@@ -62,7 +51,7 @@ const getRandomUnicIndex = (min, max) => {
     return currentValue;
   };
 };
-const randomUnicMessageId = getRandomUnicIndex(1, 1000);
+const randomUnicMessageId = getRandomUniqueIndex(1, 1000);
 
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
@@ -85,39 +74,37 @@ const getNewComment = () => {
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz '.split('');
 
+const minDescriptionLength = 5;
+const maxDescriptionLength = 25;
+
+const descriptionLength = getRandomInteger(minDescriptionLength, maxDescriptionLength);
+
 const getCardDescription = () => {
   let newCardDesctiption = '';
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < descriptionLength; i++) {
     newCardDesctiption += getRandomArrayElement(ALPHABET);
   }
   return newCardDesctiption;
 };
 
-const randomUnicCardId = getRandomUnicIndex(1, 25);
-const randomUnicCardUrl = getRandomUnicIndex(1, 25);
-const randomUnicCardLikes = getRandomUnicIndex(15, 200);
+const minRandomIndex = 1;
+const maxRandomIndex = 25;
+const minRandomLikes = 15;
+const maxRandomLikes = 200;
+const randomUniqueCardId = getRandomUniqueIndex(minRandomIndex, maxRandomIndex);
+const randomUniqueCardUrl = getRandomUniqueIndex(minRandomIndex, maxRandomIndex);
+const randomUniqueCardLikes = getRandomUniqueIndex(minRandomLikes, maxRandomLikes);
 
 const getNewCard = () => {
   const randomCommentsCount = getRandomInteger(0, 30);
 
-  // const getCommentsList = () => {
-  //   const commentsList = [];
-  //   for (let i = 0; i < randomCommentsCount; i++) {
-  //     commentsList.push(getNewComment());
-  //   }
-  //   return commentsList;
-  // };
-
-  const commentsList = [];
-  for (let i = 0; i < randomCommentsCount; i++) {
-    commentsList.push(getNewComment());
-  }
+  const commentsList = Array.from({length: randomCommentsCount}, getNewComment());
 
   return {
-    id: randomUnicCardId(),
-    url: `photos/${randomUnicCardUrl()}.jpg`,
+    id: randomUniqueCardId(),
+    url: `photos/${randomUniqueCardUrl()}.jpg`,
     description: getCardDescription(),
-    likes: randomUnicCardLikes(),
+    likes: randomUniqueCardLikes(),
     comments: commentsList
   };
 
