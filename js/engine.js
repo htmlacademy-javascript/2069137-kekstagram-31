@@ -1,15 +1,15 @@
 import { MESSAGES, NAMES, ALPHABET } from './data.js';
-import { getRandomInteger, getRandomUniqueIndex } from './utils.js';
+import { getRandomInteger, getRandomUniqueNumber } from './utils.js';
 
 
-const randomUnicMessageId = getRandomUniqueIndex(1, 1000);
+const randomUniqueMessageId = getRandomUniqueNumber(1, 1000);
 
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 const getNewComment = () => {
   const randomAvatarId = getRandomInteger(1, 6);
   return {
-    id: randomUnicMessageId(),
+    id: randomUniqueMessageId(),
     avatar: `img/avatar-${randomAvatarId}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAMES)
@@ -22,29 +22,25 @@ const maxDescriptionLength = 25;
 const descriptionLength = getRandomInteger(minDescriptionLength, maxDescriptionLength);
 
 const getCardDescription = () => {
-  let newCardDesctiption = '';
+  let newCardDescription = '';
   for (let i = 0; i < descriptionLength; i++) {
-    newCardDesctiption += getRandomArrayElement(ALPHABET);
+    newCardDescription += getRandomArrayElement(ALPHABET);
   }
-  return newCardDesctiption;
+  return newCardDescription;
 };
 
-const MIN_CARD_ID = 1;
-const MAX_CARD_ID = 25;
 const MIN_CARD_LIKES = 15;
 const MAX_CARD_LIKES = 200;
-const randomUniqueCardId = getRandomUniqueIndex(MIN_CARD_ID, MAX_CARD_ID);
-const randomUniqueCardUrl = getRandomUniqueIndex(MIN_CARD_ID, MAX_CARD_ID);
-const randomUniqueCardLikes = getRandomUniqueIndex(MIN_CARD_LIKES, MAX_CARD_LIKES);
+const randomUniqueCardLikes = getRandomUniqueNumber(MIN_CARD_LIKES, MAX_CARD_LIKES);
 
-const getNewCard = () => {
+const getNewCard = (id) => {
   const randomCommentsCount = getRandomInteger(0, 30);
 
-  const commentsList = Array.from({length: randomCommentsCount}, getNewComment());
+  const commentsList = Array.from({length: randomCommentsCount}, getNewComment);
 
   return {
-    id: randomUniqueCardId(),
-    url: `photos/${randomUniqueCardUrl()}.jpg`,
+    id,
+    url: `photos/${id}.jpg`,
     description: getCardDescription(),
     likes: randomUniqueCardLikes(),
     comments: commentsList
@@ -52,6 +48,6 @@ const getNewCard = () => {
 
 };
 
-const listOfCards = () => Array.from({length: 25}, getNewCard);
+const listOfCards = () => Array.from({length: 25}, (_, index) => getNewCard(index + 1));
 
 export {listOfCards};
