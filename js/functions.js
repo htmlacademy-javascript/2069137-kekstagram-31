@@ -45,30 +45,23 @@ getNumber('sl39');
 /* приводим строку к массиву и берём два значения: часы и минуты. Сверяем часы с часами, минуты с минутами */
 // Функция проверяет, если время начала встречи в сумме с длительностью меньше конца рабочего дня (нет - false)
 // Функция возвращает true
+const DATE = new Date(2001, 1, 1, 0, 0, 0);
 
 const isInWorkTime = (workDayStart, workDayEnd, meetStart, meetLasts) => {
-  const [startDayHours, startDayMinutes] = workDayStart.split(':').map((item) => Number(item));
-  const [endDayHours, endDayMinutes] = workDayEnd.split(':').map((item) => Number(item));
-  const [startMeetHours, startMeetMinutes] = meetStart.split(':').map((item) => Number(item));
+  const dateStartDay = new Date(DATE.getTime() + workDayStart * 60000);
+  const dateEndDay = new Date(DATE.getTime() + workDayEnd * 60000);
+  const dateStartMeet = new Date(DATE.getTime() + meetStart * 60000);
+  const dateEndMeet = new Date(dateStartMeet.getTime() + meetLasts * 60000);
 
-  if (startMeetHours < startDayHours) {
+  if (dateStartMeet < dateStartDay) {
     return false;
-  } else if (startMeetHours === startDayHours && startMeetMinutes < startDayMinutes) {
+  }
+
+
+  if (dateEndMeet > dateEndDay) {
     return false;
   }
 
-  let [endMeetHours, endMeetMinutes] = [startMeetHours + Math.floor(meetLasts / 60), startMeetMinutes + meetLasts % 60];
-
-  if (endMeetMinutes >= 60) {
-    endMeetHours += Math.floor(endMeetMinutes / 60);
-    endMeetMinutes %= 60;
-  }
-
-  if (endMeetHours > endDayHours) {
-    return false;
-  } else if (endMeetHours === endDayHours && endMeetMinutes > endDayMinutes) {
-    return false;
-  }
   return true;
 };
 
