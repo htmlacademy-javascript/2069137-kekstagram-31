@@ -45,13 +45,14 @@ getNumber('sl39');
 /* приводим строку к массиву и берём два значения: часы и минуты. Сверяем часы с часами, минуты с минутами */
 // Функция проверяет, если время начала встречи в сумме с длительностью меньше конца рабочего дня (нет - false)
 // Функция возвращает true
-const DATE = new Date(2001, 1, 1, 0, 0, 0);
+const DATE = '2001-01-01';
 
 const isInWorkTime = (workDayStart, workDayEnd, meetStart, meetLasts) => {
-  const dateStartDay = new Date(DATE.getTime() + workDayStart * 60000);
-  const dateEndDay = new Date(DATE.getTime() + workDayEnd * 60000);
-  const dateStartMeet = new Date(DATE.getTime() + meetStart * 60000);
-  const dateEndMeet = new Date(dateStartMeet.getTime() + meetLasts * 60000);
+  const dateStartDay = new Date([DATE, workDayStart]);
+  const dateEndDay = new Date([DATE, workDayEnd]);
+  const dateStartMeet = new Date([DATE, meetStart]);
+  const dateEndMeet = new Date(dateStartMeet);
+  dateEndMeet.setMinutes(dateStartMeet.getMinutes() + meetLasts);
 
   if (dateStartMeet < dateStartDay) {
     return false;
@@ -65,4 +66,4 @@ const isInWorkTime = (workDayStart, workDayEnd, meetStart, meetLasts) => {
   return true;
 };
 
-isInWorkTime('8:00', '17:30', '08:00', 900);
+isInWorkTime('8:00', '17:30', '17:30', 9);
