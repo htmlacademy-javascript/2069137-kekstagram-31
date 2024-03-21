@@ -48,6 +48,6 @@ const getNewCard = (id) => {
 
 };
 
-const listOfCards = () => Array.from({length: 25}, (_, index) => getNewCard(index + 1));
+const getListOfCards = () => Array.from({length: 25}, (_, index) => getNewCard(index + 1));
 
-export {getNewCard, listOfCards};
+export {getNewCard, getListOfCards};
