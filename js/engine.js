@@ -50,4 +50,4 @@ const getNewCard = (id) => {
 
 const listOfCards = () => Array.from({length: 25}, (_, index) => getNewCard(index + 1));
 
-export {listOfCards};
+export {getNewCard, listOfCards};

@@ -29,3 +29,41 @@ const getNumber = (ourString) => {
 };
 
 getNumber('sl39');
+
+
+/* Напишите функцию, которая принимает время начала и конца рабочего дня,
+  а также время старта и продолжительность встречи в минутах и возвращает true,
+  если встреча не выходит за рамки рабочего дня, и false, если выходит.
+
+  Время указывается в виде строки в формате часы:минуты. Для указания часов и минут
+  могут использоваться как две цифры, так и одна. Например, 8 часов 5 минут могут быть указаны по-разному: 08:05, 8:5, 08:5 или 8:05.
+
+  Продолжительность задаётся числом. Гарантируется, что и рабочий день, и встреча укладываются в одни календарные сутки. */
+
+
+// Функция проверяет, время начало встречи меньше ли времени конца рабочего дня И больше ли начала рабочего дня (нет - false)
+/* приводим строку к массиву и берём два значения: часы и минуты. Сверяем часы с часами, минуты с минутами */
+// Функция проверяет, если время начала встречи в сумме с длительностью меньше конца рабочего дня (нет - false)
+// Функция возвращает true
+const DATE = '2001-01-01';
+
+const isInWorkTime = (workDayStart, workDayEnd, meetStart, meetLasts) => {
+  const dateStartDay = new Date([DATE, workDayStart]);
+  const dateEndDay = new Date([DATE, workDayEnd]);
+  const dateStartMeet = new Date([DATE, meetStart]);
+  const dateEndMeet = new Date(dateStartMeet);
+  dateEndMeet.setMinutes(dateStartMeet.getMinutes() + meetLasts);
+
+  if (dateStartMeet < dateStartDay) {
+    return false;
+  }
+
+
+  if (dateEndMeet > dateEndDay) {
+    return false;
+  }
+
+  return true;
+};
+
+isInWorkTime('8:00', '17:30', '17:30', 9);
