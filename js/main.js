@@ -1,5 +1,5 @@
-import {listOfCards} from './engine.js';
-import './minics.js';
+import {getListOfCards} from './engine.js';
+import {renderCards} from './render-cards.js';
 
-listOfCards();
-
+getListOfCards();
+renderCards(getListOfCards());
