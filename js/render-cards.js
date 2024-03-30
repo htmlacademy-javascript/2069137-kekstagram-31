@@ -5,6 +5,7 @@ const fragment = document.createDocumentFragment();
 const renderCards = (cardList) => {
   cardList.forEach((card) => {
     const picture = pictureTemplate.cloneNode(true);
+    picture.dataset.id = card.id;
     const pictureImage = picture.querySelector('.picture__img');
     const pictureComments = picture.querySelector('.picture__comments');
     const pictureLikes = picture.querySelector('.picture__likes');
