@@ -34,7 +34,7 @@ const MAX_CARD_LIKES = 200;
 const randomUniqueCardLikes = getRandomUniqueNumber(MIN_CARD_LIKES, MAX_CARD_LIKES);
 
 const getNewCard = (id) => {
-  const randomCommentsCount = getRandomInteger(0, 30);
+  const randomCommentsCount = getRandomInteger(0, 15);
 
   const commentsList = Array.from({length: randomCommentsCount}, getNewComment);
 
