@@ -1,4 +1,4 @@
-import { fillBigPicture } from './fill-big-picture';
+import { fillBigPicture, resetCommentCounter } from './fill-big-picture';
 import { isEscape } from './utils';
 
 const pictures = document.querySelector('.pictures'); // Список с миниатюрами
@@ -8,6 +8,7 @@ const bigPicture = document.querySelector('.big-picture'); // Большое ф�
 const onDocumentKeyDown = (evt) => {
   if (isEscape(evt)) {
     evt.preventDefault();
+    resetCommentCounter();
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
   }
@@ -41,16 +42,10 @@ const initialize = (cardList) => {
   });
   bigPictureClose.addEventListener('click', () => { // Слушатель события по клику на кнопку закрытия
     bigPicture.classList.add('hidden');
+    resetCommentCounter();
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onDocumentKeyDown);
   });
 };
 
 export {initialize};
-
-/*
-Написать программу, которая показывает только 5 первых комментариев из списка.
-По нажатию кнопки с классом comments-loader должны показываться следующие 5 комментариев.
-Количество показанных комментариев должно совпадать с тем, которое в данный момент отображается.
-
-*/
