@@ -3,7 +3,9 @@ const bigPicture = document.querySelector('.big-picture'); // попап
 const commentsCurrentCounter = bigPicture.querySelector('.social__comment-shown-count'); // Кол-во комментариев в наст. время
 const showMoreButton = bigPicture.querySelector('.social__comments-loader'); // Кнопка "Показать больше"
 const commentsListElement = bigPicture.querySelector('.social__comments'); // Список комментариев
-const totalCommentsCounter = bigPicture.querySelector('.social__comment-total-count'); // Общее кол-во комментариев
+const image = bigPicture.querySelector('.big-picture__img img');
+const likesCounter = bigPicture.querySelector('.likes-count');
+const commentsCounter = bigPicture.querySelector('.social__comment-total-count');
 
 let commentList = []; // Массив комментариев
 let visibleCardCounter = 0;
@@ -29,13 +31,8 @@ const renderComments = (comments) => {
 const showMoreComments = () => {
   if (visibleCardCounter + STEP < commentList.length) {
     renderComments(commentList.slice(visibleCardCounter, visibleCardCounter + STEP));
-    visibleCardCounter += 5;
-    if (visibleCardCounter <= Number(totalCommentsCounter.textContent)) {
-      commentsCurrentCounter.textContent = visibleCardCounter;
-    } else {
-      commentsCurrentCounter.textContent = totalCommentsCounter.textContent;
-      showMoreButton.classList.add('hidden');
-    }
+    visibleCardCounter += STEP;
+    commentsCurrentCounter.textContent = visibleCardCounter;
   } else {
     renderComments(commentList.slice(visibleCardCounter, commentList.length));
     visibleCardCounter = commentList.length;
@@ -45,16 +42,13 @@ const showMoreComments = () => {
 };
 
 // Функция по заполнению большой карточки
-const fillBigPicture = (card, cardContainer) => {
+const fillBigPicture = (card) => {
   commentsListElement.innerHTML = '';
 
-  const image = cardContainer.querySelector('.big-picture__img img');
   image.src = card.url;
-  const likesCounter = cardContainer.querySelector('.likes-count');
   likesCounter.textContent = card.likes;
 
   commentsCurrentCounter.textContent = visibleCardCounter;
-  const commentsCounter = bigPicture.querySelector('.social__comment-total-count');
   commentsCounter.textContent = card.comments.length;
 
   // renderComments(card.comments.slice(0, 5));
