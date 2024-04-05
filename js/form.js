@@ -35,7 +35,7 @@ const onDocumentKeyDown = (evt) => {
     evt.preventDefault();
     formPopup.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    imageInput.value = '';
+    document.querySelector('#upload-select-image').reset();
     overlay.classList.add('hidden');
 
   }
@@ -60,26 +60,25 @@ popupCloseButton.addEventListener('click', () => {
 
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = document.querySelector('.text__hashtags');
+// hashtagValue.textContent.toLowerCase();
 const commentField = document.querySelector('.text__description');
 
 // Удаление и добавление работы закрытия попапа по Escape, когда фокус на элементе и когда снят
 
-hashtagInput.onfocus = () => {
+hashtagInput.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeyDown);
-};
-commentField.onfocus = () => {
+});
+hashtagInput.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeyDown);
-};
+});
 
-hashtagInput.onblur = () => {
+hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeyDown);
-};
+});
 
-commentField.onblur = () => {
+hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeyDown);
-};
-
-// Работа с pristine
+});
 
 // Создали pristine
 const pristine = new Pristine(form, {
@@ -88,43 +87,70 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-// Создали массив хештегов (заполняем в form.addEventListener)
-let hashtagList = hashtagInput.value.split(' ');
+// Создали массив хештегов
 
-// hashtagInput.onchange = () => {
-//   hashtagList = hashtagInput.value.split(' ');
-// };
+const getHashtagsFromString = (hashtagString) => hashtagString
+  .trim()
+  .split(' ')
+  .filter((item) => item.length > 0);
 
 // Массив валидаторов для хештегов
+
 const validators = [
   {
-    validator: () => {
-      hashtagList.forEach((hashtag) => {
-        if (hashtag.length > 1 && hashtag[0] !== '#') {
-          return false;
-        }
-        return true;
-      });
+    validator: (value) => {
+      const ourHashtags = getHashtagsFromString(value);
+      return ourHashtags.every((hashtag) => hashtag.length > 0 && hashtag[0] === '#');
     },
-    errorMessage: 'Первый символ должен быть #'
+    errorMessage: 'Первый символ хештега должен быть #'
   },
   {
-    validator: () => {
-      hashtagList.forEach((hashtag) => {
-        if (hashtag[0] === '#' && (hashtag.length === 1 || hashtag.length > 20)) {
-          return false;
-        }
-        return true;
-      });
+    validator: (value) => {
+      const ourHashtags = getHashtagsFromString(value);
+      return ourHashtags.every((hashtag) => hashtag.length > 1 || hashtag[0] !== '#');
     },
-    errorMessage: 'Длина хештега должна быть от 2 до 20 символов'
+    errorMessage: 'Хештег не может быть пустым'
+  },
+  {
+    validator: (value) => {
+      const ourHashtags = getHashtagsFromString(value);
+      return ourHashtags.every((hashtag) => hashtag.length <= 20);
+    },
+    errorMessage: 'Максимальная длина хештега - 20 символов'
+  },
+  {
+    validator: (value) => {
+      const hashtagRegExp = /^#[a-zA-Zа-я0-9]/;
+      const ourHashtags = getHashtagsFromString(value);
+      return ourHashtags.every((hashtag) => hashtag.length > 0 && hashtagRegExp.test(hashtag));
+    },
+    errorMessage: 'Используйте только буквы и цифры'
+  },
+  {
+    validator: (value) => {
+      value = hashtagInput.value.toLowerCase();
+      const ourHashtags = getHashtagsFromString(value);
+      const hashtagSet = new Set(ourHashtags);
+
+      return ourHashtags.length === hashtagSet.size;
+    },
+    errorMessage: 'Нельзя писать одинаковые хештеги'
   }
 ];
 
-// Перебор массива валидаторов и передача валидатора в addValidator
+pristine.addValidator(hashtagInput, (value) => {
+  const ourHashtags = getHashtagsFromString(value);
+  if (ourHashtags.length <= 5) {
+    return true;
+  }
+  return false;
+}, 'Нельзя указать больше пяти');
+
+
 validators.forEach(({validator, errorMessage}) => {
   pristine.addValidator(hashtagInput, validator, errorMessage);
 });
+
 
 // Добавили валидатор для поля комментариев
 pristine.addValidator(commentField, (value) => {
@@ -137,6 +163,5 @@ pristine.addValidator(commentField, (value) => {
 // Слушатель событий по submit на форму
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  hashtagList = hashtagInput.value.split(' ');
   pristine.validate();
 });
