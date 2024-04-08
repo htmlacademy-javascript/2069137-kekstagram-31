@@ -22,17 +22,28 @@
 */
 import { isEscape } from './utils';
 
-const popupOpenButton = document.querySelector('.img-upload__control');
 const formPopup = document.querySelector('.img-upload__overlay');
 const popupCloseButton = document.querySelector('.img-upload__cancel');
 const overlay = document.querySelector('.img-upload__overlay');
 const imageInput = document.querySelector('.img-upload__input');
 
+const form = document.querySelector('.img-upload__form');
+const hashtagInput = document.querySelector('.text__hashtags');
+const commentField = document.querySelector('.text__description');
+
 // Реализация закрытия & открытия формы
+
+// Создали pristine
+const pristine = new Pristine(form, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error'
+});
 
 const onDocumentKeyDown = (evt) => {
   if (isEscape(evt)) {
     evt.preventDefault();
+    pristine.reset();
     formPopup.classList.add('hidden');
     document.body.classList.remove('modal-open');
     document.querySelector('#upload-select-image').reset();
@@ -41,27 +52,21 @@ const onDocumentKeyDown = (evt) => {
   }
 };
 
-imageInput.onchange = () => {
+imageInput.addEventListener('change', () => {
   overlay.classList.remove('hidden');
-  popupOpenButton.addEventListener('click', () => {
-    formPopup.classList.remove('hidden');
-    document.body.classList.add('modal-open');
-    document.addEventListener('keydown', onDocumentKeyDown);
-  });
-};
+  formPopup.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeyDown);
+});
 
 
 popupCloseButton.addEventListener('click', () => {
+  pristine.reset();
   formPopup.classList.add('hidden');
   document.body.classList.remove('modal-open');
   imageInput.value = '';
   overlay.classList.add('hidden');
 });
-
-const form = document.querySelector('.img-upload__form');
-const hashtagInput = document.querySelector('.text__hashtags');
-// hashtagValue.textContent.toLowerCase();
-const commentField = document.querySelector('.text__description');
 
 // Удаление и добавление работы закрытия попапа по Escape, когда фокус на элементе и когда снят
 
@@ -78,13 +83,6 @@ hashtagInput.addEventListener('blur', () => {
 
 hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeyDown);
-});
-
-// Создали pristine
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error'
 });
 
 // Создали массив хештегов
@@ -120,7 +118,7 @@ const validators = [
   },
   {
     validator: (value) => {
-      const hashtagRegExp = /^#[a-zA-Zа-я0-9]/;
+      const hashtagRegExp = /^#[a-zA-Zа-я0-9]+$/;
       const ourHashtags = getHashtagsFromString(value);
       return ourHashtags.every((hashtag) => hashtag.length > 0 && hashtagRegExp.test(hashtag));
     },
@@ -144,7 +142,7 @@ pristine.addValidator(hashtagInput, (value) => {
     return true;
   }
   return false;
-}, 'Нельзя указать больше пяти');
+}, 'Нельзя указать больше пяти', 1, true);
 
 
 validators.forEach(({validator, errorMessage}) => {
