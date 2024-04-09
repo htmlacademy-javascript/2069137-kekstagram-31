@@ -28,8 +28,7 @@ const getNumber = (ourString) => {
   return Number(resultNumber);
 };
 
-getNumber('sl39');
-
+getNumber();
 
 /* Напишите функцию, которая принимает время начала и конца рабочего дня,
   а также время старта и продолжительность встречи в минутах и возвращает true,
