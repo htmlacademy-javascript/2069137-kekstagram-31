@@ -1,25 +1,5 @@
-/*
-+ 1. Прописать тегу <form> значения:
-    method
-    enctype
-    action
-
-Далее:
-Форма заполнена верно - при отправке открывается страница сервера из action с данными.
-Форма заполнена неверно - при отправке открывается страница с ошибками
-
-??? В идеале у пользователя не должно быть сценария, при котором он может отправить некорректную форму.
-??? Изучите, что значит загрузка изображения, и как, когда и каким образом показывается форма редактирования изображения. Напишите код и добавьте необходимые обработчики для реализации этого пункта техзадания. В работе вы можете опираться на код показа окна с полноразмерной фотографией, который вы, возможно, уже написали в предыдущей домашней работе.
-
-!!! Важно. Подстановка выбранного изображения в форму — это отдельная домашняя работа. В данном задании этот пункт реализовывать не нужно.
-
-+ 2. Форма закрывается при ...
-3. Сбрасывается значение из .img-upload__input
-Значение других полей формы также нужно сбрасывать.
-
-Напишите код для валидации формы добавления изображения, используя библиотеку Pristine (скрипт находится в директории /vendor/pristine). Список полей для валидации: Хэштеги Комментарий
-Реализуйте логику проверки так, чтобы, как минимум, она срабатывала при попытке отправить форму и не давала этого сделать, если форма заполнена не по правилам. При желании, реализуйте проверки сразу при вводе значения в поле.
-*/
+import { resetScale } from './scale-controls';
+import { resetEffects } from './slider';
 import { isEscape } from './utils';
 
 const formPopup = document.querySelector('.img-upload__overlay');
@@ -40,17 +20,23 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-const onDocumentKeyDown = (evt) => {
-  if (isEscape(evt)) {
-    evt.preventDefault();
-    pristine.reset();
-    formPopup.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    document.querySelector('#upload-select-image').reset();
-    overlay.classList.add('hidden');
-
-  }
+const closeForm = () => {
+  pristine.reset();
+  resetScale();
+  resetEffects();
+  formPopup.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  overlay.classList.add('hidden');
+  document.removeEventListener('keydown', onDocumentKeyDown);
 };
+
+function onDocumentKeyDown (evt) {
+  if (isEscape(evt) && evt.target !== hashtagInput && evt.target !== commentField) {
+    evt.preventDefault();
+    form.reset();
+    closeForm();
+  }
+}
 
 imageInput.addEventListener('change', () => {
   overlay.classList.remove('hidden');
@@ -59,30 +45,8 @@ imageInput.addEventListener('change', () => {
   document.addEventListener('keydown', onDocumentKeyDown);
 });
 
-
 popupCloseButton.addEventListener('click', () => {
-  pristine.reset();
-  formPopup.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  imageInput.value = '';
-  overlay.classList.add('hidden');
-});
-
-// Удаление и добавление работы закрытия попапа по Escape, когда фокус на элементе и когда снят
-
-hashtagInput.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onDocumentKeyDown);
-});
-hashtagInput.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onDocumentKeyDown);
-});
-
-hashtagInput.addEventListener('blur', () => {
-  document.addEventListener('keydown', onDocumentKeyDown);
-});
-
-hashtagInput.addEventListener('blur', () => {
-  document.addEventListener('keydown', onDocumentKeyDown);
+  closeForm();
 });
 
 // Создали массив хештегов

@@ -1,6 +1,7 @@
 const form = document.querySelector('.img-upload__form');
 const filterFieldset = form.querySelector('.img-upload__effects');
 const image = form.querySelector('.img-upload__preview img');
+const sliderWrapper = form.querySelector('.img-upload__effect-level');
 const slider = form.querySelector('.effect-level__slider');
 const sliderValue = form.querySelector('.effect-level__value');
 let currentEffect = 'none';
@@ -15,7 +16,7 @@ noUiSlider.create(slider, {
 });
 
 const effectValueToStyleMap = {
-  none: (value = 'none') => value,
+  none: () => 'none',
   chrome: (value = 1) => `grayscale(${value})`,
   sepia: (value = 1) => `sepia(${value})`,
   marvin: (value = 100) => `invert(${value}%)`,
@@ -74,12 +75,17 @@ const effectValueToSliderMap = {
   }
 };
 
+const resetEffects = () => {
+  image.style.filter = effectValueToStyleMap.none();
+  sliderWrapper.classList.add('hidden');
+};
+
 filterFieldset.addEventListener('change', (evt) => {
   if (evt.target.value === 'none') {
-    slider.classList.add('hidden');
+    resetEffects();
     return;
   }
-  slider.classList.remove('hidden');
+  sliderWrapper.classList.remove('hidden');
   currentEffect = evt.target.value;
   const {start, ...options} = effectValueToSliderMap[evt.target.value];
   slider.noUiSlider.updateOptions(options);
@@ -92,3 +98,5 @@ slider.noUiSlider.on('update', ([currentValue]) => {
   image.style.filter = effectValueToStyleMap[currentEffect](currentValue);
 
 });
+
+export {resetEffects};

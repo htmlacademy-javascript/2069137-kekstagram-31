@@ -20,3 +20,8 @@ increaseImageButton.addEventListener('click', () => {
   }
 });
 
+const resetScale = () => {
+  image.style.transform = 'none';
+};
+
+export {resetScale};
