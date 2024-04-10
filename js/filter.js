@@ -1,4 +1,4 @@
-import { removeCards } from './render-cards';
+import { removeThumbnails } from './thumbnails';
 
 const Filter = {
   DEFAULT: 'filter-default',
@@ -61,7 +61,7 @@ const RENDER_DELAY = 500;
 const initFilter = (cb, photos) => {
   showFilters();
   const getDebouncedFunction = debounce((data) => {
-    removeCards();
+    removeThumbnails();
     cb(data);
   }, RENDER_DELAY);
 

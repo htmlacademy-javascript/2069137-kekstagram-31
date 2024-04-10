@@ -15,6 +15,7 @@ const hashtagInput = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const submitButton = form.querySelector('.img-upload__submit');
 const imagePreview = form.querySelector('.img-upload__preview img');
+const filterPreviewImages = form.querySelectorAll('.effects__preview');
 
 const SubmitButtonText = {
   IDLE: 'Сохранить',
@@ -41,21 +42,28 @@ const closeForm = () => {
 };
 
 function onDocumentKeyDown (evt) {
-  if (isEscape(evt) && evt.target !== hashtagInput && evt.target !== commentField) {
+  const errorMessagePopup = document.querySelector('.error');
+  if (isEscape(evt) && evt.target !== hashtagInput && evt.target !== commentField && errorMessagePopup === null) {
     evt.preventDefault();
     form.reset();
     closeForm();
   }
 }
 
+const getUploadPhotoUrl = (photo) => URL.createObjectURL(photo);
+
 imageInput.addEventListener('change', () => {
   overlay.classList.remove('hidden');
   formPopup.classList.remove('hidden');
-  const fileForPreview = imageInput.files[0];
-  imagePreview.src = URL.createObjectURL(fileForPreview);
+  const photoUrl = getUploadPhotoUrl(imageInput.files[0]);
+  imagePreview.src = photoUrl;
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeyDown);
+  filterPreviewImages.forEach((image) => {
+    image.style.backgroundImage = `url(${photoUrl})`;
+  });
 });
+
 
 popupCloseButton.addEventListener('click', () => {
   closeForm();
@@ -94,7 +102,7 @@ const validators = [
   },
   {
     validator: (value) => {
-      const hashtagRegExp = /^#[a-zA-Zа-я0-9]+$/;
+      const hashtagRegExp = /^#[a-zA-Zа-яА-Я0-9]+$/;
       const ourHashtags = getHashtagsFromString(value);
       return ourHashtags.every((hashtag) => hashtag.length > 0 && hashtagRegExp.test(hashtag));
     },
@@ -174,6 +182,7 @@ const setFormSubmit = () => {
         })
         .catch(() => {
           showErrorModal();
+          // Отключить ESC
         })
         .finally(unblockSubmitButton);
     }
