@@ -150,34 +150,36 @@ const setFormSubmit = () => {
 
 const getUploadPhotoUrl = (photo) => URL.createObjectURL(photo);
 
-imageInput.addEventListener('change', () => {
-  overlay.classList.remove('hidden');
-  formPopup.classList.remove('hidden');
-  const photoUrl = getUploadPhotoUrl(imageInput.files[0]);
-  imagePreview.src = photoUrl;
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeyDown);
-  filterPreviewImages.forEach((image) => {
-    image.style.backgroundImage = `url(${photoUrl})`;
+const initializeForm = () => {
+  imageInput.addEventListener('change', () => {
+    overlay.classList.remove('hidden');
+    formPopup.classList.remove('hidden');
+    const photoUrl = getUploadPhotoUrl(imageInput.files[0]);
+    imagePreview.src = photoUrl;
+    document.body.classList.add('modal-open');
+    document.addEventListener('keydown', onDocumentKeyDown);
+    filterPreviewImages.forEach((image) => {
+      image.style.backgroundImage = `url(${photoUrl})`;
+    });
   });
-});
+  popupCloseButton.addEventListener('click', () => {
+    closeForm();
+  });
 
-popupCloseButton.addEventListener('click', () => {
-  closeForm();
-});
-
-pristine.addValidator(hashtagInput, (value) => {
-  const ourHashtags = getHashtagsFromString(value);
-  return ourHashtags.length <= 5;
-}, 'Нельзя указать больше пяти', 1, true);
+  pristine.addValidator(hashtagInput, (value) => {
+    const ourHashtags = getHashtagsFromString(value);
+    return ourHashtags.length <= 5;
+  }, 'Нельзя указать больше пяти', 1, true);
 
 
-validators.forEach(({validator, errorMessage}) => {
-  pristine.addValidator(hashtagInput, validator, errorMessage);
-});
+  validators.forEach(({validator, errorMessage}) => {
+    pristine.addValidator(hashtagInput, validator, errorMessage);
+  });
 
 
-// Добавили валидатор для поля комментариев
-pristine.addValidator(commentField, (value) => value.length <= 140, 'Ваш комментарий превысил допустимый лимит в 140 символов');
+  // Добавили валидатор для поля комментариев
+  pristine.addValidator(commentField, (value) => value.length <= 140, 'Ваш комментарий превысил допустимый лимит в 140 символов');
+};
 
-export {setFormSubmit};
+
+export {setFormSubmit, initializeForm};

@@ -38,7 +38,6 @@ const openBigPicture = (evt, cardList) => {
 const initialize = (cardList) => {
   const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   picturesContainer.addEventListener('click', (evt) => { // Слушатель события по клику на список
-    evt.preventDefault();
     openBigPicture(evt, cardList);
   });
   bigPictureClose.addEventListener('click', () => { // Слушатель события по клику на кнопку закрытия
