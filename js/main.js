@@ -1,11 +1,23 @@
-import {getListOfCards} from './engine.js';
-import {renderCards} from './render-cards.js';
+import {renderThumbnails} from './thumbnails.js';
 import {initialize} from './viewing-cards.js';
-import './form.js';
+import {initializeForm, setFormSubmit} from './form.js';
 import './scale-controls.js';
 import './slider.js';
 
-const cardList = getListOfCards();
+import {getData} from './api.js';
+import {initFilter} from './filter.js';
+import {dataErrorMessage} from './message.js';
 
-renderCards(cardList);
-initialize(cardList);
+getData()
+  .then((photos) => {
+    renderThumbnails(photos);
+    initialize(photos);
+    initFilter(renderThumbnails, photos);
+  })
+  .catch(() => {
+    dataErrorMessage();
+  });
+
+initializeForm();
+
+setFormSubmit();

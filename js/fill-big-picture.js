@@ -36,7 +36,7 @@ const showMoreComments = () => {
   } else {
     renderComments(commentList.slice(visibleCardCounter, commentList.length));
     visibleCardCounter = commentList.length;
-    commentsCurrentCounter.textContent = commentList.length;
+    commentsCurrentCounter.textContent = String(commentList.length);
     showMoreButton.classList.add('hidden');
   }
 };
@@ -49,7 +49,7 @@ const fillBigPicture = (card) => {
   likesCounter.textContent = card.likes;
 
   commentsCurrentCounter.textContent = visibleCardCounter;
-  commentsCounter.textContent = card.comments.length;
+  commentsCounter.textContent = String(card.comments.length);
 
   // renderComments(card.comments.slice(0, 5));
   commentList = card.comments;
@@ -59,14 +59,12 @@ const fillBigPicture = (card) => {
   description.textContent = card.description;
 };
 
-
-showMoreButton.addEventListener('click', showMoreComments); // Слушатель событий по клику на "Показать ещё"
-
 // Сбрасывание счетчика отображенных комментариев
 const resetCommentCounter = () => {
   showMoreButton.classList.remove('hidden');
   visibleCardCounter = 0;
 };
 
+showMoreButton.addEventListener('click', () => showMoreComments()); // Слушатель событий по клику на "Показать ещё"
 
 export {fillBigPicture, resetCommentCounter};

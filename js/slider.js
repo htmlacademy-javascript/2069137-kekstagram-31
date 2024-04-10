@@ -6,15 +6,6 @@ const slider = form.querySelector('.effect-level__slider');
 const sliderValue = form.querySelector('.effect-level__value');
 let currentEffect = 'none';
 
-noUiSlider.create(slider, {
-  start: 1,
-  connect: [true, false],
-  range: {
-    'min': 0,
-    'max': 100
-  }
-});
-
 const effectValueToStyleMap = {
   none: () => 'none',
   chrome: (value = 1) => `grayscale(${value})`,
@@ -91,6 +82,15 @@ filterFieldset.addEventListener('change', (evt) => {
   slider.noUiSlider.updateOptions(options);
   slider.noUiSlider.set(start);
   image.style.filter = effectValueToStyleMap[evt.target.value]();
+});
+
+noUiSlider.create(slider, {
+  start: 1,
+  connect: [true, false],
+  range: {
+    'min': 0,
+    'max': 100
+  }
 });
 
 slider.noUiSlider.on('update', ([currentValue]) => {

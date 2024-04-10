@@ -5,23 +5,11 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomUniqueNumber = (min, max) => {
-  const previousValues = [];
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
 const getNumberFromString = (ourString) => {
   const newString = String(ourString);
   let resultNumber = 0;
   for (let i = 0; i < newString.length; i++) {
-    if (!isNaN(newString[i])) {
+    if (!isNaN(Number(newString[i]))) {
       resultNumber += newString[i];
     }
   }
@@ -30,4 +18,4 @@ const getNumberFromString = (ourString) => {
 
 const isEscape = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getRandomUniqueNumber, isEscape, getNumberFromString};
+export {getRandomInteger, isEscape, getNumberFromString};
