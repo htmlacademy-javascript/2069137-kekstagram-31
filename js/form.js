@@ -2,6 +2,9 @@ import { resetScale } from './scale-controls';
 import { resetEffects } from './slider';
 import { isEscape } from './utils';
 
+import {showErrorModal, showSuccessModal} from './message.js';
+import {sendData} from './api.js';
+
 const formPopup = document.querySelector('.img-upload__overlay');
 const popupCloseButton = document.querySelector('.img-upload__cancel');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -10,6 +13,13 @@ const imageInput = document.querySelector('.img-upload__input');
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
+const imagePreview = form.querySelector('.img-upload__preview img');
+
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
 // Реализация закрытия & открытия формы
 
@@ -41,6 +51,11 @@ function onDocumentKeyDown (evt) {
 imageInput.addEventListener('change', () => {
   overlay.classList.remove('hidden');
   formPopup.classList.remove('hidden');
+  imagePreview.src = imageInput.value.slice(11);
+  // sendData(new FormData(form))
+  //   .then(() => {
+  //     console.log(form.querySelector('.img-upload__input').);
+  //   });
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeyDown);
 });
@@ -123,7 +138,49 @@ pristine.addValidator(commentField, (value) => {
 }, 'Ваш комментарий превысил допустимый лимит в 140 символов');
 
 // Слушатель событий по submit на форму
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const onUploadModalCloseClick = () => {
+  closeUploadModal();
+};
+
+function closeUploadModal() {
+  form.reset();
+  pristine.reset();
+  resetScale();
+  resetEffects();
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  popupCloseButton.addEventListener('click', onUploadModalCloseClick);
+  document.removeEventListener('keydown', onDocumentKeyDown);
+}
+
+const setFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(() => {
+          showSuccessModal();
+          closeUploadModal();
+        })
+        .catch(() => {
+          showErrorModal();
+        })
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export {setFormSubmit};

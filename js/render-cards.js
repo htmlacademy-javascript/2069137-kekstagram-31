@@ -20,4 +20,8 @@ const renderCards = (cardList) => {
   pictureContainer.appendChild(fragment);
 };
 
-export {renderCards};
+const removeCards = () => {
+  document.querySelectorAll('.picture').forEach((picture) => picture.remove());
+};
+
+export {renderCards, removeCards};
