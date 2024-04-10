@@ -58,7 +58,7 @@ function createModalElement(type) {
   const template = document.querySelector(`#${type}`).content;
   const modalElement = template.querySelector(`.${type}`).cloneNode(true);
 
-  modalElement.querySelector(`.${type}__button`).addEventListener('click', closeActiveModal);
+  modalElement.querySelector(`.${type}__button`).addEventListener('click', () => closeActiveModal());
 
   return modalElement;
 }

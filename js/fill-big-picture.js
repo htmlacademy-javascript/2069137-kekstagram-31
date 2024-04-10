@@ -65,6 +65,6 @@ const resetCommentCounter = () => {
   visibleCardCounter = 0;
 };
 
-showMoreButton.addEventListener('click', showMoreComments); // Слушатель событий по клику на "Показать ещё"
+showMoreButton.addEventListener('click', () => showMoreComments()); // Слушатель событий по клику на "Показать ещё"
 
 export {fillBigPicture, resetCommentCounter};
