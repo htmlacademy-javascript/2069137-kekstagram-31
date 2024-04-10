@@ -141,7 +141,6 @@ const setFormSubmit = () => {
         })
         .catch(() => {
           showErrorModal();
-          // Отключить ESC
         })
         .finally(unblockSubmitButton);
     }
