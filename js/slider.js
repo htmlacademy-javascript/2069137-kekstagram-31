@@ -84,12 +84,6 @@ filterFieldset.addEventListener('change', (evt) => {
   image.style.filter = effectValueToStyleMap[evt.target.value]();
 });
 
-slider.noUiSlider.on('update', ([currentValue]) => {
-  sliderValue.value = Number(currentValue);
-  image.style.filter = effectValueToStyleMap[currentEffect](currentValue);
-
-});
-
 noUiSlider.create(slider, {
   start: 1,
   connect: [true, false],
@@ -97,6 +91,12 @@ noUiSlider.create(slider, {
     'min': 0,
     'max': 100
   }
+});
+
+slider.noUiSlider.on('update', ([currentValue]) => {
+  sliderValue.value = Number(currentValue);
+  image.style.filter = effectValueToStyleMap[currentEffect](currentValue);
+
 });
 
 export {resetEffects};
