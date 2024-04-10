@@ -1,7 +1,7 @@
 import { fillBigPicture, resetCommentCounter } from './fill-big-picture';
 import { isEscape } from './utils';
 
-const pictures = document.querySelector('.pictures'); // Список с миниатюрами
+const picturesContainer = document.querySelector('.pictures'); // Список с миниатюрами
 const bigPicture = document.querySelector('.big-picture'); // Большое фото
 
 // Обработчик события по клавише
@@ -37,7 +37,8 @@ const openBigPicture = (evt, cardList) => {
 // Инициализатор со слушателем события по клику
 const initialize = (cardList) => {
   const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
-  pictures.addEventListener('click', (evt) => { // Слушатель события по клику на список
+  picturesContainer.addEventListener('click', (evt) => { // Слушатель события по клику на список
+    evt.preventDefault();
     openBigPicture(evt, cardList);
   });
   bigPictureClose.addEventListener('click', () => { // Слушатель события по клику на кнопку закрытия

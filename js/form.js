@@ -50,25 +50,6 @@ function onDocumentKeyDown (evt) {
   }
 }
 
-const getUploadPhotoUrl = (photo) => URL.createObjectURL(photo);
-
-imageInput.addEventListener('change', () => {
-  overlay.classList.remove('hidden');
-  formPopup.classList.remove('hidden');
-  const photoUrl = getUploadPhotoUrl(imageInput.files[0]);
-  imagePreview.src = photoUrl;
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeyDown);
-  filterPreviewImages.forEach((image) => {
-    image.style.backgroundImage = `url(${photoUrl})`;
-  });
-});
-
-
-popupCloseButton.addEventListener('click', () => {
-  closeForm();
-});
-
 // Создали массив хештегов
 
 const getHashtagsFromString = (hashtagString) => hashtagString
@@ -120,28 +101,6 @@ const validators = [
   }
 ];
 
-pristine.addValidator(hashtagInput, (value) => {
-  const ourHashtags = getHashtagsFromString(value);
-  if (ourHashtags.length <= 5) {
-    return true;
-  }
-  return false;
-}, 'Нельзя указать больше пяти', 1, true);
-
-
-validators.forEach(({validator, errorMessage}) => {
-  pristine.addValidator(hashtagInput, validator, errorMessage);
-});
-
-
-// Добавили валидатор для поля комментариев
-pristine.addValidator(commentField, (value) => {
-  if (value.length > 140){
-    return false;
-  }
-  return true;
-}, 'Ваш комментарий превысил допустимый лимит в 140 символов');
-
 // Слушатель событий по submit на форму
 
 const blockSubmitButton = () => {
@@ -188,5 +147,37 @@ const setFormSubmit = () => {
     }
   });
 };
+
+const getUploadPhotoUrl = (photo) => URL.createObjectURL(photo);
+
+imageInput.addEventListener('change', () => {
+  overlay.classList.remove('hidden');
+  formPopup.classList.remove('hidden');
+  const photoUrl = getUploadPhotoUrl(imageInput.files[0]);
+  imagePreview.src = photoUrl;
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeyDown);
+  filterPreviewImages.forEach((image) => {
+    image.style.backgroundImage = `url(${photoUrl})`;
+  });
+});
+
+popupCloseButton.addEventListener('click', () => {
+  closeForm();
+});
+
+pristine.addValidator(hashtagInput, (value) => {
+  const ourHashtags = getHashtagsFromString(value);
+  return ourHashtags.length <= 5;
+}, 'Нельзя указать больше пяти', 1, true);
+
+
+validators.forEach(({validator, errorMessage}) => {
+  pristine.addValidator(hashtagInput, validator, errorMessage);
+});
+
+
+// Добавили валидатор для поля комментариев
+pristine.addValidator(commentField, (value) => value.length <= 140, 'Ваш комментарий превысил допустимый лимит в 140 символов');
 
 export {setFormSubmit};

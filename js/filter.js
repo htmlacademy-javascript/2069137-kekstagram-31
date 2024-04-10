@@ -8,12 +8,12 @@ const Filter = {
 
 const RANDOM_PICTURES_AMOUNT = 10;
 
-const filters = document.querySelector('.img-filters');
+const filterList = document.querySelector('.img-filters');
 
-let currentActiveButton = filters.querySelector('#filter-default');
+let currentActiveButton = filterList.querySelector('#filter-default');
 
 const showFilters = () => {
-  filters.classList.remove('img-filters--inactive');
+  filterList.classList.remove('img-filters--inactive');
 };
 
 const sortByComments = (photoA, photoB) => photoB.comments.length - photoA.comments.length;
@@ -66,7 +66,7 @@ const initFilter = (cb, photos) => {
   }, RENDER_DELAY);
 
   const onFilterBtnClick = (evt) => filterPictures(evt, getDebouncedFunction, photos);
-  filters.addEventListener('click', onFilterBtnClick);
+  filterList.addEventListener('click', onFilterBtnClick);
 };
 
 export {initFilter};

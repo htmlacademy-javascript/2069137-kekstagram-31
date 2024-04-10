@@ -20,7 +20,7 @@ const dataErrorMessage = (errorMessage) => {
   }, MESSAGE_SHOW_TIME);
 };
 
-const Modals = {
+const ModalWindow = {
   success: createModalElement('success'),
   error: createModalElement('error'),
 };
@@ -44,11 +44,11 @@ const showModal = (type) => {
   activeModalType = type;
   document.addEventListener('click', onOuterBodyClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  document.body.append(Modals[activeModalType]);
+  document.body.append(ModalWindow[activeModalType]);
 };
 
 function closeActiveModal() {
-  Modals[activeModalType].remove();
+  ModalWindow[activeModalType].remove();
   activeModalType = null;
   document.removeEventListener('click', onOuterBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);

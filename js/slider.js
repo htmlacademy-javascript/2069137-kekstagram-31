@@ -6,15 +6,6 @@ const slider = form.querySelector('.effect-level__slider');
 const sliderValue = form.querySelector('.effect-level__value');
 let currentEffect = 'none';
 
-noUiSlider.create(slider, {
-  start: 1,
-  connect: [true, false],
-  range: {
-    'min': 0,
-    'max': 100
-  }
-});
-
 const effectValueToStyleMap = {
   none: () => 'none',
   chrome: (value = 1) => `grayscale(${value})`,
@@ -97,6 +88,15 @@ slider.noUiSlider.on('update', ([currentValue]) => {
   sliderValue.value = Number(currentValue);
   image.style.filter = effectValueToStyleMap[currentEffect](currentValue);
 
+});
+
+noUiSlider.create(slider, {
+  start: 1,
+  connect: [true, false],
+  range: {
+    'min': 0,
+    'max': 100
+  }
 });
 
 export {resetEffects};
