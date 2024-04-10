@@ -51,11 +51,8 @@ function onDocumentKeyDown (evt) {
 imageInput.addEventListener('change', () => {
   overlay.classList.remove('hidden');
   formPopup.classList.remove('hidden');
-  imagePreview.src = imageInput.value.slice(11);
-  // sendData(new FormData(form))
-  //   .then(() => {
-  //     console.log(form.querySelector('.img-upload__input').);
-  //   });
+  const fileForPreview = imageInput.files[0];
+  imagePreview.src = URL.createObjectURL(fileForPreview);
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeyDown);
 });
