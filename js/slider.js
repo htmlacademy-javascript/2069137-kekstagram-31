@@ -6,15 +6,6 @@ const slider = form.querySelector('.effect-level__slider');
 const sliderValue = form.querySelector('.effect-level__value');
 let currentEffect = 'none';
 
-const effectValueToStyleMap = {
-  none: () => 'none',
-  chrome: (value = 1) => `grayscale(${value})`,
-  sepia: (value = 1) => `sepia(${value})`,
-  marvin: (value = 100) => `invert(${value}%)`,
-  phobos: (value = 3) => `blur(${value}px)`,
-  heat: (value = 3) => `brightness(${value})`
-};
-
 const effectValueToSliderMap = {
   none: {
     range: {
@@ -64,6 +55,15 @@ const effectValueToSliderMap = {
     step: 0.1,
     start: 3,
   }
+};
+
+const effectValueToStyleMap = {
+  none: () => 'none',
+  chrome: (value = effectValueToSliderMap.chrome.start) => `grayscale(${value})`,
+  sepia: (value = effectValueToSliderMap.sepia.start) => `sepia(${value})`,
+  marvin: (value = effectValueToSliderMap.marvin.start) => `invert(${value}%)`,
+  phobos: (value = effectValueToSliderMap.phobos.start) => `blur(${value}px)`,
+  heat: (value = effectValueToSliderMap.heat.start) => `brightness(${value})`
 };
 
 const resetEffects = () => {

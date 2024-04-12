@@ -2,7 +2,7 @@ const commentTemplate = document.querySelector('#comment-item').content.querySel
 const bigPicture = document.querySelector('.big-picture'); // попап
 const commentsCurrentCounter = bigPicture.querySelector('.social__comment-shown-count'); // Кол-во комментариев в наст. время
 const showMoreButton = bigPicture.querySelector('.social__comments-loader'); // Кнопка "Показать больше"
-const commentsListElement = bigPicture.querySelector('.social__comments'); // Список комментариев
+const commentsListContainer = bigPicture.querySelector('.social__comments'); // Список комментариев
 const image = bigPicture.querySelector('.big-picture__img img');
 const likesCounter = bigPicture.querySelector('.likes-count');
 const commentsCounter = bigPicture.querySelector('.social__comment-total-count');
@@ -16,15 +16,15 @@ const renderComments = (comments) => {
   const ourFragment = document.createDocumentFragment();
 
   comments.forEach((commentData) => {
-    const newCommentElement = commentTemplate.cloneNode(true);
-    const avatar = newCommentElement.querySelector('.social__picture');
+    const newCommentFromTemplate = commentTemplate.cloneNode(true);
+    const avatar = newCommentFromTemplate.querySelector('.social__picture');
     avatar.src = commentData.avatar;
     avatar.alt = commentData.name;
-    const text = newCommentElement.querySelector('.social__text');
+    const text = newCommentFromTemplate.querySelector('.social__text');
     text.textContent = commentData.message;
-    ourFragment.appendChild(newCommentElement);
+    ourFragment.appendChild(newCommentFromTemplate);
   });
-  commentsListElement.appendChild(ourFragment);
+  commentsListContainer.appendChild(ourFragment);
 };
 
 // Добавление следующих комментариев (1-5)
@@ -43,7 +43,7 @@ const showMoreComments = () => {
 
 // Функция по заполнению большой карточки
 const fillBigPicture = (card) => {
-  commentsListElement.innerHTML = '';
+  commentsListContainer.innerHTML = '';
 
   image.src = card.url;
   likesCounter.textContent = card.likes;
