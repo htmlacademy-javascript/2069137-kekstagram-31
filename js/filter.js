@@ -1,4 +1,4 @@
-import { removeThumbnails } from './thumbnails';
+import { removeThumbnails } from './thumbnails.js';
 
 const DEBOUNCE_DELAY = 500;
 const RENDER_DELAY = 500;

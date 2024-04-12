@@ -1,6 +1,6 @@
-import { resetScale } from './scale-controls';
-import { resetEffects } from './slider';
-import { isEscape } from './utils';
+import { resetScale } from './scale-controls.js';
+import { resetEffects } from './slider.js';
+import { isEscape } from './utils.js';
 
 import {showErrorModal, showSuccessModal} from './message.js';
 import {sendData} from './api.js';
