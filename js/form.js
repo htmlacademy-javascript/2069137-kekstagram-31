@@ -1,6 +1,6 @@
-import { resetScale } from './scale-controls';
-import { resetEffects } from './slider';
-import { isEscape } from './utils';
+import { resetScale } from './scale-controls.js';
+import { resetEffects } from './slider.js';
+import { isEscape } from './utils.js';
 
 import {showErrorModal, showSuccessModal} from './message.js';
 import {sendData} from './api.js';
@@ -16,6 +16,10 @@ const commentField = document.querySelector('.text__description');
 const submitButton = form.querySelector('.img-upload__submit');
 const imagePreview = form.querySelector('.img-upload__preview img');
 const filterPreviewImages = form.querySelectorAll('.effects__preview');
+
+const MAX_HASHTAGS_COUNT = 5;
+const MAX_COMMENTS_LENGTH = 140;
+const MAX_HASHTAG_LENGTH = 20;
 
 const SubmitButtonText = {
   IDLE: 'Сохранить',
@@ -77,7 +81,7 @@ const validators = [
   {
     validator: (value) => {
       const ourHashtags = getHashtagsFromString(value);
-      return ourHashtags.every((hashtag) => hashtag.length <= 20);
+      return ourHashtags.every((hashtag) => hashtag.length <= MAX_HASHTAG_LENGTH);
     },
     errorMessage: 'Максимальная длина хештега - 20 символов'
   },
@@ -167,7 +171,7 @@ const initializeForm = () => {
 
   pristine.addValidator(hashtagInput, (value) => {
     const ourHashtags = getHashtagsFromString(value);
-    return ourHashtags.length <= 5;
+    return ourHashtags.length <= MAX_HASHTAGS_COUNT;
   }, 'Нельзя указать больше пяти', 1, true);
 
 
@@ -177,7 +181,7 @@ const initializeForm = () => {
 
 
   // Добавили валидатор для поля комментариев
-  pristine.addValidator(commentField, (value) => value.length <= 140, 'Ваш комментарий превысил допустимый лимит в 140 символов');
+  pristine.addValidator(commentField, (value) => value.length <= MAX_COMMENTS_LENGTH, 'Ваш комментарий превысил допустимый лимит в 140 символов');
 };
 
 

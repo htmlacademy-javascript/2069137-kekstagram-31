@@ -1,4 +1,7 @@
-import { removeThumbnails } from './thumbnails';
+import { removeThumbnails } from './thumbnails.js';
+
+const DEBOUNCE_DELAY = 500;
+const RENDER_DELAY = 500;
 
 const Filter = {
   DEFAULT: 'filter-default',
@@ -46,17 +49,13 @@ const filterPictures = (evt, cb, photos) => {
 };
 
 /* Устранение дребезга */
-const DEBOUNCE_DELAY = 500;
-
-function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
-
-const RENDER_DELAY = 500;
+};
 
 const initFilter = (cb, photos) => {
   showFilters();

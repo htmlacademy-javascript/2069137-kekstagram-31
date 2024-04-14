@@ -21,8 +21,8 @@ const dataErrorMessage = (errorMessage) => {
 };
 
 const ModalWindow = {
-  success: createModalElement('success'),
-  error: createModalElement('error'),
+  success: createModalPopup('success'),
+  error: createModalPopup('error'),
 };
 
 let activeModalType = null;
@@ -54,13 +54,13 @@ function closeActiveModal() {
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
-function createModalElement(type) {
+function createModalPopup(type) {
   const template = document.querySelector(`#${type}`).content;
-  const modalElement = template.querySelector(`.${type}`).cloneNode(true);
+  const modalPopup = template.querySelector(`.${type}`).cloneNode(true);
 
-  modalElement.querySelector(`.${type}__button`).addEventListener('click', () => closeActiveModal());
+  modalPopup.querySelector(`.${type}__button`).addEventListener('click', () => closeActiveModal());
 
-  return modalElement;
+  return modalPopup;
 }
 
 const showSuccessModal = () => showModal('success');

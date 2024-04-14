@@ -1,4 +1,4 @@
-import { getNumberFromString } from './utils';
+import { getNumberFromString } from './utils.js';
 
 const form = document.querySelector('.img-upload__form');
 const decreaseImageButton = form.querySelector('.scale__control--smaller');

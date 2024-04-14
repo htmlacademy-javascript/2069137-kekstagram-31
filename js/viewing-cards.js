@@ -1,5 +1,5 @@
-import { fillBigPicture, resetCommentCounter } from './fill-big-picture';
-import { isEscape } from './utils';
+import { fillBigPicture, resetCommentCounter } from './fill-big-picture.js';
+import { isEscape } from './utils.js';
 
 const picturesContainer = document.querySelector('.pictures'); // Список с миниатюрами
 const bigPicture = document.querySelector('.big-picture'); // Большое фото
@@ -11,6 +11,7 @@ const onDocumentKeyDown = (evt) => {
     resetCommentCounter();
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', onDocumentKeyDown);
   }
 };
 
